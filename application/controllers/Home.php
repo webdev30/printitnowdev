@@ -20,6 +20,7 @@ class Home extends CI_Controller {
 	}	
 
 
+	# Home Page -----------------------------------------
 	public function index()
 	{
 		$this->load->view('index');
