@@ -5,6 +5,7 @@
  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.js"></script>
  <script src="<?php echo MAINSITE_URL_ASSETS?>vendor/js/vcustom.js"></script>
  <script src="<?php echo MAINSITE_URL_ASSETS?>js/custom.js"></script>
+  <script src="<?php echo MAINSITE_URL_ASSETS?>js/jquery-date.js"></script>
 
 
 

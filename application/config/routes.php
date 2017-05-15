@@ -59,11 +59,16 @@ $route['review'] = 'home/review';
 $route['thank-you'] = 'home/thankyou';
 
 $route['login'] = 'home/login';
+$route['logout'] = 'home/logout';
 $route['vendor'] = 'dashboard/vendordashboard';
 $route['forget-password'] = 'ajax/forgetpass';
 $route['reset/(:any)'] = 'home/login/$1';
 $route['get-order-details'] = 'dashboard/getOrderDetails';
 $route['update-order-status'] = 'dashboard/updateOrderStatus';
+$route['track-files'] = 'dashboard/trackFiles';
+$route['order-history'] = 'dashboard/orderHistory';
+$route['profile'] = 'dashboard/profile';
+$route['update-password'] = 'dashboard/updatePassword';
 
 
 $route['404_override'] = '';

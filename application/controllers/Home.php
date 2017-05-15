@@ -20,7 +20,6 @@ class Home extends CI_Controller {
 	}	
 
 
-	# Home Page -----------------------------------------
 	public function index()
 	{
 		$this->load->view('index');
@@ -30,12 +29,20 @@ class Home extends CI_Controller {
 	# Call print form ------------------------------------------------------
 	public function printIt()
 	{
-		#Get vendor list
+		#Get vendor list 
 		$vendors = $this->user->getVendors();
 		if( !empty($vendors) )
 		{
 			$data['vendors'] = $vendors;
 		}
+
+		#Get time slots 
+		$timeslots = $this->orders->getTimeslots();
+		if( !empty($timeslots) )
+		{
+			$data['timeslots'] = $timeslots;
+		}
+		
 		$this->load->view('print-now', $data);
 	}
 	
@@ -44,7 +51,19 @@ class Home extends CI_Controller {
 	{
 		//echo "<pre>";
 		//print_r($_SESSION);
-		$this->load->view('review');
+		
+		if( !isset($_SESSION['user_info']) || !isset($_SESSION['data']) )
+		{
+			redirect("print");
+		}
+
+		$timeslots = $this->orders->getTimeslots();
+		if( !empty($timeslots) )
+		{
+			$data['timeslots'] = $timeslots;
+		}
+
+		$this->load->view('review', $data);
 	}
 	
 
@@ -61,7 +80,7 @@ class Home extends CI_Controller {
     		$files = $_FILES['file'];
     		$errors = array();
     		
-    		for($i=0;$i<count($files);$i++)
+    		for($i=0;$i<$number_of_files;$i++)
     		{
       			if($_FILES['file']['error'][$i] != 0) 
 		  			$errors[$i] = 'Couldn\'t upload file '.$_FILES['file']['name'][$i];
@@ -69,15 +88,13 @@ class Home extends CI_Controller {
     		
     		if(sizeof($errors)==0)
     		{
-	  			$number_of_files = sizeof($_FILES['file']['tmp_name']);
-	  			$files = $_FILES['file'];
 	  			$errors = array();
       			$this->load->library('upload');
       			$config['upload_path'] = DIR_WS_UPLOAD_IMAGES;
       			$config['allowed_types'] = IMAGE_ALLOWED_TYPES;
       			$totalsize = 0;
       
-      			for ($i = 0; $i < count($files); $i++)
+      			for ($i = 0; $i < $number_of_files; $i++)
       			{
         			$_FILES['file']['name'] = $files['name'][$i];
         			$_FILES['file']['type'] = $files['type'][$i];
@@ -88,7 +105,7 @@ class Home extends CI_Controller {
         			$totalsize += $_FILES['file']['size'];
 
         			#Check file types
-        			if( in_array($fileext[1], array("jpg", "jpeg", "png", "doc", "docx", "pdf", "ppt")) )
+        			if( $this->general_functions->checkImage($fileext[1]) )
         			{
         				# check total file size
         				if( $totalsize <= (50*MB) )
@@ -108,17 +125,15 @@ class Home extends CI_Controller {
 	        			else
 	        			{
 	        				$errors[] = "File size exceeding 50MB";
-	        				break;
 	        			}
         			}
         			else
         			{
         				$errors[] = "Invalid file type";
-        				break;
         			}
       			}
     		}
-    		
+    	
        		# If there is no error
        		if( empty($errors) )
        		{
@@ -136,6 +151,7 @@ class Home extends CI_Controller {
 				$_SESSION['user_info']['alternate_contact']=$this->input->post('alternate_contact');
 				$_SESSION['user_info']['vendor']=$this->input->post('vendor');
 				$_SESSION['user_info']['pickup']=$this->input->post('pick_up_date');
+				$_SESSION['user_info']['picktime']=$this->input->post('timeslot');
 				$Mydata=array();
 			
 				foreach( $this->input->post('data') as $key=>$value )
@@ -161,8 +177,14 @@ class Home extends CI_Controller {
 				if( !empty($vendors) )
 				{
 					$data['vendors'] = $vendors;
-				}  			
-    			$this->load->view('print-now', $data);
+				}
+				#Get vendor list
+				$timeslots = $this->orders->getTimeslots();
+				if( !empty($timeslots) )
+				{
+					$data['timeslots'] = $timeslots;
+				}
+		    	$this->load->view('print-now', $data);
     			/*echo "<pre>";
       			print_r($errors);
 	  			exit;*/
@@ -181,17 +203,25 @@ class Home extends CI_Controller {
 			$orderid = $this->orders->insOrder();
 			if( $orderid!="" && !empty($_SESSION['data']) )
 			{
+				//echo "here";
 				$this->orders->insOrderDetail($orderid);
 			}
 		}
 		//echo CI_VERSION;
 		$this->load->view('thanku-page');
+		unset($_SESSION['user_info']);
+		unset($_SESSION['data']);
 	}
 
 
 	# Vendor login ----------------------------------------------------------
 	public function login($resetData='')
 	{
+		if( isset($_SESSION['vendorid']) && $_SESSION['vendorid']!="" )
+		{
+			redirect('vendor');
+		}
+
 		# Login action
 		if( $this->input->post("log_usr") )
 		{
@@ -204,6 +234,7 @@ class Home extends CI_Controller {
 				if( !empty($chkLogin) )
 				{
 					$_SESSION['vendorid'] = $chkLogin[0]['id'];
+					$_SESSION['vendorname'] = ucwords($chkLogin[0]['contact_person_name']);
 					redirect('vendor');
 				}
 				else
@@ -259,6 +290,14 @@ class Home extends CI_Controller {
 		}
 
 		$this->load->view('vendor-login', $data);
+	}
+
+
+	# Vendor logout ----------------------------------------------------------
+	public function logout()
+	{
+		session_destroy();
+		redirect("login");
 	}
 
 }

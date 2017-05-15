@@ -2,7 +2,7 @@
 //echo "<pre>";
 //print_r($prPOST);
 
-$name = $email = $contact = $alternate_contact = $vendor = $paper_size = $print_option = $print_sided = $orientation = $pages = $no_of_copy = $total_no_pages = $binding = $pick_up_date = $optradio = $from = $to = "";
+$name = $email = $contact = $alternate_contact = $vendor = $paper_size = $print_option = $print_sided = $orientation = $pages = $no_of_copy = $total_no_pages = $binding = $pick_up_date = $optradio = $from = $to = $timeslotval = "";
 
 if( isset($prPOST) && !empty($prPOST) )
 {
@@ -23,6 +23,7 @@ if( isset($prPOST) && !empty($prPOST) )
   $optradio = $prPOST['data']['optradio'][1];
   $from = $prPOST['data']['from'][0];
   $to = $prPOST['data']['to'][0];
+  $timeslotval = $prPOST['timeslot'];
 
   ?><script>
   $("#collapseTwo").slideDown();
@@ -103,7 +104,7 @@ if( isset($prPOST) && !empty($prPOST) )
             <div id="collapseTwo" class="panel-collapse collapse">
               <div class="panel-body">
                 <fieldset class="upload-file">
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="form-group">
                       <select class="form-control sect-opt" id="p_vendor" name="vendor">
                         <option value="">Choose Your Vendor</option>
@@ -122,6 +123,25 @@ if( isset($prPOST) && !empty($prPOST) )
                   <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                       <input type="text" class="form-control datepick" id="datepicker1" value="<?php echo $pick_up_date; ?>" name="pick_up_date" placeholder="Pick Up Date*">
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                      <select class="form-control sect-opt" id="timeslot" name="timeslot">
+                        <option value="">Time Slot*</option>
+                        <?php
+                        # Check available slots
+                        $curtime = date("H");
+                        if( isset($timeslots) && !empty($timeslots) )
+                        {
+                          if( $curtime >= 13 && $curtime <= 21 )
+                          {
+                            ?><option value="<?php echo $timeslots[0]['id']; ?>" <?php echo ($timeslotval==$timeslots[0]['id'])?"selected":""; ?> ><?php echo $timeslots[0]['start_time']." - ".$timeslots[0]['end_time']; ?></option><?php
+                          }
+                          ?><option value="<?php echo $timeslots[1]['id']; ?>" <?php echo ($timeslotval==$timeslots[1]['id'])?"selected":""; ?> ><?php echo $timeslots[1]['start_time']." - ".$timeslots[1]['end_time']; ?></option><?php
+                        }
+                        ?>
+                      </select>
                     </div>
                   </div>
                   

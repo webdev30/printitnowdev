@@ -21,7 +21,9 @@ class Order_model extends CI_Model
     		'contact' => trim($_SESSION['user_info']['contact']),
     		'alternate_contact' => trim($_SESSION['user_info']['alternate_contact']),
     		'vendor' => trim($_SESSION['user_info']['vendor']),
-    		'created_on' => date("Y-m-d H:i:s")
+    		'created_on' => date("Y-m-d H:i:s"),
+            'pickup_date' => trim($_SESSION['user_info']['pickup']),
+            'pickup_slot' => trim($_SESSION['user_info']['picktime'])
     		);
     	$this->db->insert('print_paytm_order', $data);
     	return $this->db->insert_id();
@@ -40,7 +42,7 @@ class Order_model extends CI_Model
     		$data = array(
     			'order_reference_id' => $orderid,
     			'file_name' => $_SESSION['file'][$key],
-                'file_type' => $filetype,
+                'file_type' => $filetype[1],
     			'print_page' => $printPages,
     			'paper_size' => $value['paper_size'],
     			'print_option' => $value['print_option'],
@@ -51,11 +53,11 @@ class Order_model extends CI_Model
     			'page_count' => trim($value['total_no_pages']),
     			'page_from' => trim($value['from']),
     			'page_to' => trim($value['to']),
-    			'binding' => $value['binding'],
-    			'pickup_date' => trim($value['pick_up_date'])
+    			'binding' => $value['binding']
     		);
 
     		$this->db->insert('print_paytm_order_detail', $data);
+            //return $this->db->last_query();
     	}
     }
 
@@ -63,10 +65,61 @@ class Order_model extends CI_Model
     # Get current orders list order by id desc
     public function getCurOrders($vid=0)
     {
-        $this->db->where( array("vendor"=>$vid, "order_status !="=>"4") );
-        $this->db->order_by( "order_reference_id", "desc" );
-        $query = $this->db->get("print_paytm_order");
+        $this->db->select("ppo.*, count(ppod.order_reference_id) as filecount");
+        $this->db->from("print_paytm_order ppo");
+        $this->db->join("print_paytm_order_detail ppod", "ppod.order_reference_id = ppo.order_reference_id", "left");
+        $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4") );
+        $this->db->group_by( "ppo.order_reference_id" );
+        $this->db->order_by( "ppo.order_reference_id", "desc" );
+        $query = $this->db->get();
         return $query->result_array();
+        //return $this->db->last_query();
+    }
+
+
+    # Get delivered orders list order by id desc
+    public function getOrdersHistory($vid=0)
+    {
+        $this->db->select("ppo.*, count(ppod.order_reference_id) as filecount");
+        $this->db->from("print_paytm_order ppo");
+        $this->db->join("print_paytm_order_detail ppod", "ppod.order_reference_id = ppo.order_reference_id", "left");
+        $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status ="=>"4") );
+        $this->db->group_by( "ppo.order_reference_id" );
+        $this->db->order_by( "ppo.order_reference_id", "desc" );
+        $query = $this->db->get();
+        return $query->result_array();
+        //return $this->db->last_query();
+    }
+
+
+    # search current orders list 
+    public function searchOrders($filterby='', $filterval='', $vid=0)
+    {
+        $this->db->select("ppo.*, count(ppod.order_reference_id) as filecount");
+        $this->db->from("print_paytm_order ppo");
+        $this->db->join("print_paytm_order_detail ppod", "ppod.order_reference_id = ppo.order_reference_id", "left");
+        
+        switch($filterby)
+        {
+        case 'rn':
+            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "ppo.order_reference_no"=>$filterval) );
+            break;
+        case 'pd':
+            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "ppo.pickup_date"=>$filterval) );
+            break;
+        case 'od':
+            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "DATE(ppo.created_on)"=>$filterval) );
+            break;
+        default:
+            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4") );
+            break;
+        }
+        
+        $this->db->group_by( "ppo.order_reference_id" );
+        $this->db->order_by( "ppo.order_reference_id", "desc" );
+        $query = $this->db->get();
+        return $query->result_array();
+        //return $this->db->last_query();
     }
 
 
@@ -74,7 +127,7 @@ class Order_model extends CI_Model
     public function getPrintDetails($cid=0)
     {
         $this->db->where( "order_reference_id", $cid );
-        $this->db->order_by( "pickup_date", "desc" );
+        //$this->db->order_by( "pickup_date", "desc" );
         $query = $this->db->get("print_paytm_order_detail");
         return $query->result_array();
     }
@@ -89,11 +142,49 @@ class Order_model extends CI_Model
     }
 
 
+    # Update order status
     public function updateOrdStat($orderid, $status)
     {
         $this->db->set( "order_status", $status );
+        if( $status==4 )
+        {
+            $this->db->set( "deliver_date", date("Y-m-d H:i:s") );
+        }
         $this->db->where( "order_reference_id", $orderid );
         return $this->db->update("print_paytm_order");
+    }
+
+
+    # Insert file download details
+    public function trackDownload($opid, $filename)
+    {
+       $data = array(
+        'vendor_id' => $_SESSION['vendorid'],
+        'file_id' => $opid,
+        'filename' => $filename,
+        'd_time' => date("Y-m-d h:i:s")
+        );
+        return $this->db->insert("trackdownload", $data);
+    }
+
+
+    # Get distinct file id in trackdownload
+    public function getPrintIdFromTrackdownload()
+    {
+        $this->db->select("file_id");
+        $this->db->where("file_id !=","");
+        $this->db->group_by("file_id");
+        $query = $this->db->get("trackdownload");
+        return $query->result_array();
+    }
+
+
+    #Get active time slots
+    public function getTimeslots()
+    {
+        $this->db->where("status", "1");
+        $query = $this->db->get("print_time_slot");
+        return $query->result_array();
     }
 
 }

@@ -111,6 +111,12 @@ $( document).ready(function()
 			$("#datepicker1").focus();
 			return false;
 		}
+		if( $("#timeslot").val() == "" )
+		{
+			$("#p_err").html("Please select pickup timeslot").css("color", "red");
+			$("#timeslot").focus();
+			return false;
+		}
 		
 	    $("#collapseTwo").slideUp();
 		$("#collapseThree").slideDown();
@@ -128,6 +134,12 @@ $( document).ready(function()
 		{
 			$("#p_err").html("Please select pickup date").css("color", "red");
 			$("#datepicker1").focus();
+			return false;
+		}
+		if( $("#timeslot").val() == "" )
+		{
+			$("#p_err").html("Please select pickup timeslot").css("color", "red");
+			$("#timeslot").focus();
 			return false;
 		}
 		$("#collapseThree").slideToggle();
@@ -406,12 +418,12 @@ $('body').on('focus',".datepick", function()
 {
 	var dt = new Date();
 	var time = dt.getHours() + ":" + dt.getMinutes();
-	var setDate = ( time > "20:00" )?"2":"1";
+	var setDate = ( time > "13:00" )?"1":"0";
   
 	$(this).datepicker(
 	{
 		dateFormat: "yy-mm-dd",
-		minDate: "+1d"
+		minDate: "+"+setDate+"d"
 	});
 });
 
@@ -584,7 +596,7 @@ $("document").ready(function()
 			$.ajax({
 				type: "Post",
 				url: "get-order-details",
-				data: {ordId: getOrderId[1]},
+				data: {ordId: getOrderId[1], pgnam: getOrderId[2]},
 				success: function(result)
 				{
 					//alert(result);
@@ -599,6 +611,7 @@ $("document").ready(function()
 	});
 	
 });
+
 //Update order status ----------------------------------------------
 function updatestatus(stat, oid)
 {
@@ -618,3 +631,121 @@ function updatestatus(stat, oid)
 	
 }
 
+//Track file download ---------------------------------------------
+function filetrack(filename='', opid='', url='')
+{
+	$.ajax({
+		type: "POST",
+		url: "track-files",
+		data: {filename: filename, opid: opid},
+		success: function(result)
+		{
+			if(result==1)
+			{
+				//$("#fileid"+opid).find("i").insertAfter("<span class=\"check\"><i class=\"fa fa-check\" aria-hidden=\"true\"></i></span>");
+				window.open(url+filename);
+			}
+		}
+	});
+}
+
+//Print receipt ---------------------------------------------
+function printFunc( divId='' )
+{
+	//alert($("iframe[name='print_frame']").html());
+	//window.print();
+	window.frames["print_frame"].document.body.innerHTML = $("iframe[name='print_frame']").text();
+	window.frames["print_frame"].window.focus();
+	window.frames["print_frame"].window.print();
+}
+
+//Custom Order Filter --------------------------------------------------
+function showFilterIp( filteropt='' )
+{
+	if( filteropt!="" )
+	{
+		if( filteropt!="rn" )
+		{
+			$("#filterval").datepicker({ dateFormat: "yy-mm-dd" });
+		}
+		else
+		{
+			$("#filterval").datepicker("destroy");
+		}
+		$("#filterval").parents("ul").css("display", "block");
+	}
+}
+$("input[id='filtergo']").click(function()
+{
+	var filteropt = $("#filteropt").val();
+	var filterval = $("#filterval").val();
+	
+	if( filteropt!="all" )
+	{
+		if( filteropt=="" )
+		{
+			$("#filteropt").css("border-color", "red");
+			return false;
+		}
+		if( filterval=="" )
+		{
+			$("#filterval").css("border-color", "red");
+			return false;
+		}
+	}
+	
+	$("#cosearch").submit();
+	
+});
+
+// Change Password ------------------------------------------------
+$("#changepassgo").click(function()
+{
+	var oldpass = $("#oldpass").val();
+	var newpass = $("#newpass").val();
+	var conpass = $("#conpass").val();
+	$("#changepasserr").html("");
+	
+	if( oldpass == "" )
+	{
+		$("#changepasserr").html("Please enter old password").css("color", "red");
+		$("#oldpass").focus();
+		return false;
+	}
+	if( newpass == "" )
+	{
+		$("#changepasserr").html("Please enter new password").css("color", "red");
+		$("#newpass").focus();
+		return false;
+	}
+	if( conpass == "" )
+	{
+		$("#changepasserr").html("Please enter confirm password").css("color", "red");
+		$("#conpass").focus();
+		return false;
+	}
+	if( conpass != newpass )
+	{
+		$("#changepasserr").html("Confirm password does not match").css("color", "red");
+		$("#conpass").focus();
+		return false;
+	}
+	
+	$.ajax({
+		type: "POST",
+		url: "update-password",
+		data: {oldpass: oldpass, newpass: newpass, conpass: conpass},
+		success: function(result)
+		{
+			if( result==1 )
+			{
+				$("#changepasserr").html("Password changed successfully").css("color", "green");
+				$("#changepassform")[0].reset();
+			}
+			else
+			{
+				$("#changepasserr").html(result).css("color", "red");
+			}
+		}
+	});
+});

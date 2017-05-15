@@ -21,10 +21,10 @@
              <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li>
-                    <a><i class="fa fa-user" aria-hidden="true"></i> Aleem Javed</a>
+                    <a><i class="fa fa-user" aria-hidden="true"></i> <?php echo $_SESSION['vendorname']; ?></a>
                 </li>            
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-power-off"></i> Logout</a>
+                    <a href="logout" onclick="window.location.href='logout'" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-power-off"></i> Logout</a>
                 </li>
             </ul>
         </div>
@@ -38,11 +38,11 @@
                     <a href="vendor"><i class="fa fa-fw fa-paper-plane-o"></i> Current Orders</a>
                 </li>
                 <li>
-                    <a href="order-history.php"><i class="fa fa-fw fa-paper-plane-o"></i> Order History</a>
+                    <a href="order-history"><i class="fa fa-fw fa-paper-plane-o"></i> Order History</a>
                 </li>
                 
                  <li>
-                    <a href="profile.php"><i class="fa fa-fw fa-user-plus"></i> Profile</a>
+                    <a href="profile"><i class="fa fa-fw fa-user-plus"></i> Profile</a>
                 </li>
                
             </ul>

@@ -6,3 +6,4 @@
 <link href="<?php echo MAINSITE_URL_ASSETS?>css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link href="<?php echo MAINSITE_URL_ASSETS?>vendor/css/style.css" rel="stylesheet" type="text/css">
 <script src="<?php echo MAINSITE_URL_ASSETS?>vendor/js/jquery-12.4.js"></script>
+<link href="<?php echo MAINSITE_URL_ASSETS?>css/jquery-date.css" rel="stylesheet" type="text/css">

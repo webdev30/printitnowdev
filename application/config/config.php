@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+date_default_timezone_set('Asia/Kolkata');
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ define('DIR_FS_UPLOAD_IMAGES', DIR_FS_DOCUMENT .'assets/uploads/');
 define('ASSETS_PATH', $config['base_url'].'assets/');
 /***Image Allowed type Define**/
 define('IMAGE_UPLOAD_PATH','./assets/images/');
-define('IMAGE_ALLOWED_TYPES','png|jpg|gif|jpeg');
+define('IMAGE_ALLOWED_TYPES','png|jpg|gif|jpeg|pdf|ppt|doc|docx');
 define('KB', 1024);
 define('MB', 1048576);
 define('GB', 1073741824);
@@ -50,6 +51,7 @@ define("ADMINMAIL","chandrika.aggarwal@vibescom.in");
 define("ADMINNAME","Chandrika");
 define("BCC","");
 define("PROJECT","PrintitNow");
+define("MAILREGARDS","Regards,<br/>Print it now Team");
 
 
 $config['date_format'] = 'd/m/Y';

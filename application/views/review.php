@@ -23,7 +23,7 @@
           <thead class="">
             <tr>
               <th>Product</th>
-              <th>Pick Up Date</th>
+              <th>Pick Up Schedule</th>
               <th>Total Price</th>
             </tr>
             <?php
@@ -39,7 +39,7 @@
                   Sheet / pages :  <?php echo $data['pages'] ?> <br>
                   No of Copies : <?php echo $data['no_of_copy'] ?> <br>
                   Total no. pages : <?php echo $data['total_no_pages'] ?> <br>
-                  binding :  <?php echo $data['binding']?><br>
+                  Binding :  <?php echo $data['binding']?><br>
                   Print Pages :  <?php echo ( isset($data['optradio']) && trim($data['optradio'])=="cus" )?"Custom":"All"; ?><br>
                   <?php if( isset($data['optradio']) && $data['optradio']=="cus" )
                   {
@@ -48,7 +48,21 @@
                   } 
                   ?>
                 </td>
-                <td><?php echo date('M d\' Y', strtotime($data['pick_up_date'])); ?></td>
+                <td>
+                  Date:&nbsp;<?php echo date('M d\' Y', strtotime($_SESSION['user_info']['pickup'])); ?><br />
+                  Time :&nbsp;<?php 
+                  if( isset($_SESSION['user_info']['picktime']) )
+                  {
+                    foreach ($timeslots as $value)
+                    {
+                      if( $value['id']==$_SESSION['user_info']['picktime'] )
+                      {
+                        echo date("g:i a", strtotime($value['start_time']))." - ".date("g:i a", strtotime($value['end_time']));
+                      }
+                    }
+                  } 
+                  ?>
+                </td>
               </tr>
               <?php
   					}

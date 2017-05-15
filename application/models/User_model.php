@@ -41,6 +41,14 @@ class User_model extends CI_Model
         return $query->result_array();
     }
 
+    # Get vendor details by id
+    public function getVendorById($id=0)
+    {
+        $this->db->where("id", $id);
+        $query = $this->db->get("print_vendor");
+        return $query->result_array();
+    }
+
 
 }
 ?>

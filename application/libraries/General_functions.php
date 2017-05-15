@@ -308,6 +308,28 @@ public function trim_text($text, $count)
 	}
 
 
+	# Check desired image format
+	public function checkImage($imagetype='')
+	{
+		$imgExt = array("jpg", "jpeg", "png", "doc", "docx", "pdf", "ppt");
+		if( $imagetype!='' )
+		{
+			foreach ($imgExt as $value)
+			{
+				if( $imagetype==$value )
+				{
+					return 1;
+				}
+			}
+			return 0;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+
 	/*function PermissionAuthentication($controller="",$function="")
 	{ 
 		$url = "";

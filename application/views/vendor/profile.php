@@ -4,84 +4,97 @@
 	<meta charset="utf-8" />
 	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Dashboard</title>
-    <?php include'includes/head.php'; ?>
-    
-  
+  <title>Dashboard</title>
+  <?php include'includes/head.php'; ?>
 </head>
 <body>
 <div id="throbber" style="display:none; min-height:120px;"></div>
 <div id="noty-holder"></div>
 <div id="wrapper">
-   <?php include'includes/header.php'; ?>
+  <?php include'includes/header.php'; ?>
 
     <div id="page-wrapper">
-        <div class="container-fluid">
-            <!-- Page Heading -->
-            <div class="row" id="main" >
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  <div class="page_inner_heading">
-                    <h1>Profile</h1>
-                  </div>
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="row" id="main" >
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="page_inner_heading">
+              <h1>Profile</h1>
+            </div>
+          </div>
+
+          <?php
+          if( isset($getVendor) && !empty($getVendor) )
+          {
+            ?>
+            <div class="col-sm-12 col-md-12 well" id="content">
+              <div class="profile_block">
+                <div class="group_block">
+                  <label class="block_label"><span class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span> Vendor Name</label>
+                  <p><?php echo ucwords($getVendor[0]['shop_name']); ?></p>
                 </div>
-                <div class="col-sm-12 col-md-12 well" id="content">
-                  <div class="profile_block">
-                    <div class="group_block">
-                      <label class="block_label"><span class="icon"><i class="fa fa-user" aria-hidden="true"></i></span> Name</label>
-                      <p>Aleem Javed</p>
-                    </div>
-                    <div class="group_block">
-                      <label class="block_label"><span class="icon"><i class="fa fa-envelope" aria-hidden="true"></i></span> Email</label>
-                      <p><a href="mailto:aleem.javed@vibescom.in">aleem.javed@vibescom.in</a></p>
-                    </div>
-                    <div class="group_block">
-                      <label class="block_label"><span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span> Address</label>
-                      <p>E-22, Sector-8, Vibes Communication</p>
-                    </div>
-                    <div class="group_block">
-                      <label class="block_label"><span class="icon"><i class="fa fa-phone" aria-hidden="true"></i></span> Contact No</label>
-                      
-                      <p contenteditable="true">+91 9015080818</p>
-                    </div>
-                    <div class="group_block">
-                      <label class="block_label"><span class="icon"><i class="fa fa-mobile" aria-hidden="true"></i></span> Altenate Contact No</label>
-                      <p contenteditable="true">+91 9080818150</p>
-                    </div>
-                    <div class="group_block">
-                      <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> Reset Password</label>
-                      <p contenteditable="true"><a href="javascript:void(0);" id="changepass" class="btn btn-primary">Change Password</a></p>
-                    </div>
-                    <div class="pass_col" >
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                          <div class="group_block">
-                            <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> Old Password</label>
-                            <p><input class="form-control " id="" name="" placeholder="Old Password" type="password"></p>
-                          </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                          <div class="group_block">
-                            <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> New Password</label>
-                            <p><input class="form-control " id="" name="" placeholder="New Password" type="password"></p>
-                          </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                          <div class="group_block">
-                            <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> Confirm Password</label>
-                            <p><input class="form-control " id="" name="" placeholder="Confirm Password" type="password"></p>
-                          </div>
-                        </div>
+                <div class="group_block">
+                  <label class="block_label"><span class="icon"><i class="fa fa-user" aria-hidden="true"></i></span> Contact Person</label>
+                  <p><?php echo ucwords($getVendor[0]['contact_person_name']); ?></p>
+                </div>
+                <div class="group_block">
+                  <label class="block_label"><span class="icon"><i class="fa fa-envelope" aria-hidden="true"></i></span> Email</label>
+                  <p><a href="mailto:<?php echo $getVendor[0]['email']; ?>"><?php echo $getVendor[0]['email']; ?></a></p>
+                </div>
+                <div class="group_block">
+                  <label class="block_label"><span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span> Address</label>
+                  <p><?php echo $getVendor[0]['address']; ?></p>
+                </div>
+                <div class="group_block">
+                  <label class="block_label"><span class="icon"><i class="fa fa-phone" aria-hidden="true"></i></span> Contact No</label>                      
+                  <p contenteditable="true"><?php echo $getVendor[0]['contact']; ?></p>
+                </div>
+                <div class="group_block">
+                  <label class="block_label"><span class="icon"><i class="fa fa-mobile" aria-hidden="true"></i></span> Alternate Contact No</label>
+                  <p contenteditable="true"><?php echo $getVendor[0]['alternate_contact']; ?></p>
+                </div>
+                <div class="group_block">
+                  <!--<label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> Reset Password</label>-->
+                  <p contenteditable="true"><a href="javascript:void(0);" id="changepass" class="btn btn-primary">Change Password</a></p>
+                </div>
+
+                <div class="pass_col" ><form id="changepassform" autocomplete="off" >
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                      <div class="group_block">
+                        <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> Old Password</label>
+                        <p><input class="form-control " id="oldpass" name="oldpass" maxlength="20" placeholder="Old Password*" type="password"></p>
                       </div>
                     </div>
-                    <div class="group_block">
-                      <a class="print_btn btn btn-primary pull-left" href="javascript:void(0);"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit</a>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                      <div class="group_block">
+                        <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> New Password</label>
+                        <p><input class="form-control " id="newpass" name="newpass" maxlength="20" placeholder="New Password*" type="password"></p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                      <div class="group_block">
+                        <label class="block_label"><span class="icon"><i class="fa fa-key" aria-hidden="true"></i></span> Confirm Password</label>
+                        <p><input class="form-control " id="conpass" name="conpass" maxlength="20" placeholder="Confirm Password*" type="password"></p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                  <div class="group_block">
+                    <a class="print_btn btn btn-primary pull-left" id="changepassgo" href="javascript:void(0);"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit</a>
+                    <br /><span id="changepasserr"></span>
+                  </div>
+                </form></div>
+                      
+              </div>
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-        <?php include'includes/footer.php'; ?>
+            <?php
+          }
+          ?>
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+      <?php include'includes/footer.php'; ?>
     </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
 
