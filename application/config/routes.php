@@ -58,6 +58,7 @@ $route['confirm_order'] = 'home/confirm_order';
 $route['review'] = 'home/review';
 $route['thank-you'] = 'home/thankyou';
 
+# Vendor Url
 $route['login'] = 'home/login';
 $route['logout'] = 'home/logout';
 $route['vendor'] = 'dashboard/vendordashboard';
@@ -66,9 +67,16 @@ $route['reset/(:any)'] = 'home/login/$1';
 $route['get-order-details'] = 'dashboard/getOrderDetails';
 $route['update-order-status'] = 'dashboard/updateOrderStatus';
 $route['track-files'] = 'dashboard/trackFiles';
-$route['order-history'] = 'dashboard/orderHistory';
+$route['order-history'] = 'dashboard/orderHistory';	
 $route['profile'] = 'dashboard/profile';
 $route['update-password'] = 'dashboard/updatePassword';
+
+# Admin Url
+$route['adminpanel'] = 'adminpanel';
+$route['admin-board'] = 'adminpanel/admindashboard';
+$route['adminpanel/order-history'] = 'adminpanel/orderHistory';
+$route['adminpanel/get-order-details'] = 'dashboard/getOrderDetails';
+$route['adminpanel/logout'] = 'adminpanel/logout';
 
 
 $route['404_override'] = '';

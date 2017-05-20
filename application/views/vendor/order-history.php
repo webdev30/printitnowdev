@@ -47,7 +47,8 @@
                                       <td><?php echo $history['order_reference_no']; ?></td>
                                       <td><?php echo date("M d' Y g:i A", strtotime($history['created_on'])); ?></td>
                                       <td><?php echo ucwords($history['name']); ?><br /><?php echo $history['contact']; ?></td>
-                                      <td><?php echo date("M d' Y", strtotime($history['deliver_date'])); ?></td>
+                                      <td><?php echo date("M d' Y", strtotime($history['deliver_date'])); ?><br />
+                                        Status:&nbsp;<?php echo "Delivered"; ?></td>
                                       <td class="text-center"><i class="fa fa-eye" aria-hidden="true" data-toggle="modal" data-target="#myModal1" id="vieworder_<?php echo $history['order_reference_id']; ?>_his" ></i></td>
                                     </tr>
                                     <?php

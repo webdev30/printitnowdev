@@ -7,11 +7,26 @@
             ?>
             <div class="header clearfix">
               <span class="ref_no"><?php echo $printCust[0]['order_reference_no']; ?></span>
-              <a class="print_btn btn btn-primary" onclick="printFunc();" href="javascript:void(0);"><i class="fa fa-print" aria-hidden="true"></i> Print Reciept</a>
+              <?php
+              if( isset($_SESSION['adminid']) )
+              {
+                echo "Total:&nbsp;Rs 800";
+              }
+              else
+              {
+                ?><a class="print_btn btn btn-primary" onclick="printFunc();" href="javascript:void(0);"><i class="fa fa-print" aria-hidden="true"></i> Print Reciept</a><?php
+              }
+              ?>
            </div>
             <ul>
               <li><p><span class="title"><i class="fa fa-user" aria-hidden="true"></i></span> <?php echo $printCust[0]['name']; ?></p></li>
               <li><p><span class="title"><i class="fa fa-phone" aria-hidden="true"></i></span> <?php echo $printCust[0]['contact'];  echo ($printCust[0]['alternate_contact']!="")?",&nbsp;".$printCust[0]['alternate_contact']:""; ?></p></li>
+              <?php
+              if( isset($_SESSION['adminid']) )
+              {
+                ?><li><p><span class="title"><i class="fa fa-envelope" aria-hidden="true"></i></span> <?php echo $printCust[0]['email']; ?></p></li><?php
+              }
+              ?>
             </ul>
             <?php
           }
@@ -56,7 +71,7 @@
 
                   <?php
                   # File Download
-                  if( isset($urlbase) && $urlbase!="his" )
+                  if( isset($urlbase) && $urlbase!="his" && !isset($_SESSION['adminid']) )
                   {
                     ?>
                     <span id="fileid<?php echo $eachPrint['id']; ?>" onclick="filetrack('<?php echo $eachPrint['file_name']; ?>', <?php echo $eachPrint['id']; ?>, '<?php echo MAINSITE_URL_ASSETS."uploads/"; ?>');" class="download"><i class="fa fa-download" aria-hidden="true"></i>

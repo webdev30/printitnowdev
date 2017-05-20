@@ -24,6 +24,14 @@ class User_model extends CI_Model
         return $query->result_array();
     }
 
+    # Get admin login details
+    public function adminlogin($emailid='', $pass='')
+    {
+        $this->db->where( array("email"=>$emailid, "pass"=>$pass) );
+        $query = $this->db->get("print_admin");
+        return $query->result_array();
+    }
+
     # Update password based on email id
     public function updatePassByEmail( $pass='', $emailid='' )
     {

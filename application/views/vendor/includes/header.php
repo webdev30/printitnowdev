@@ -21,10 +21,23 @@
              <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li>
-                    <a><i class="fa fa-user" aria-hidden="true"></i> <?php echo $_SESSION['vendorname']; ?></a>
+                    <a><i class="fa fa-user" aria-hidden="true"></i> <?php 
+                    if( isset($_SESSION['vendorname']) ){ echo $_SESSION['vendorname']; }
+                    if( isset($_SESSION['adminname']) ){ echo $_SESSION['adminname']; }
+                    ?></a>
                 </li>            
                 <li class="dropdown">
-                    <a href="logout" onclick="window.location.href='logout'" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-power-off"></i> Logout</a>
+                    <?php 
+                    if( isset($_SESSION['vendorid']) )
+                    {
+                        ?><a href="logout" onclick="window.location.href='<?php echo MAINSITE_URL; ?>logout'" class="dropdown-toggle" data-toggle="dropdown"><?php
+                    }
+                    else
+                    {
+                        ?><a href="adminpanel/logout" onclick="window.location.href='<?php echo MAINSITE_URL; ?>adminpanel/logout'" class="dropdown-toggle" data-toggle="dropdown"><?php   
+                    }
+                    ?>
+                    <i class="fa fa-fw fa-power-off"></i> Logout</a>
                 </li>
             </ul>
         </div>
@@ -35,15 +48,43 @@
                     
                 </li>
                 <li>
-                    <a href="vendor"><i class="fa fa-fw fa-paper-plane-o"></i> Current Orders</a>
+                    <?php 
+                    if( isset($_SESSION['vendorid']) )
+                    {
+                        ?><a href="<?php echo MAINSITE_URL; ?>vendor"><?php
+                    }
+                    else
+                    {
+                        ?><a href="<?php echo MAINSITE_URL; ?>admin-board"><?php   
+                    }
+                    ?>
+                    <i class="fa fa-fw fa-paper-plane-o"></i> Current Orders</a>
                 </li>
                 <li>
-                    <a href="order-history"><i class="fa fa-fw fa-paper-plane-o"></i> Order History</a>
+                    <?php 
+                    if( isset($_SESSION['vendorid']) )
+                    {
+                        ?><a href="<?php echo MAINSITE_URL; ?>order-history"><?php
+                    }
+                    else
+                    {
+                        ?><a href="<?php echo MAINSITE_URL; ?>adminpanel/order-history"><?php   
+                    }
+                    ?>
+                    <i class="fa fa-fw fa-paper-plane-o"></i> Order History</a>
                 </li>
                 
-                 <li>
-                    <a href="profile"><i class="fa fa-fw fa-user-plus"></i> Profile</a>
-                </li>
+                <?php 
+                # Profile page of vendor
+                if( isset($_SESSION['vendorid']) )
+                {
+                    ?>
+                    <li>
+                        <a href="<?php echo MAINSITE_URL; ?>profile"><i class="fa fa-fw fa-user-plus"></i> Profile</a>
+                    </li>
+                    <?php
+                }
+                ?>
                
             </ul>
         </div>

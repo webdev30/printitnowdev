@@ -30,9 +30,16 @@
                       <input type="password" placeholder="Password*" value="" name="log_pass" id="log_pass" maxlength="20" />
                       <a class="sub-btn" id="vlogin">Login</a>
                   </form>
-                  <div class="toggle">
+                  <?php
+                  if( !isset($admincase) )
+                  {
+                    ?>
+                    <div class="toggle">
                       <i class="fa fa-times fa-pencil"></i> Forgot your password?
-                  </div>
+                    </div>
+                    <?php
+                  }
+                  ?>
                 </div>
                 
                 <?php # Forget Password ?>

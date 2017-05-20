@@ -28,11 +28,11 @@
                     </ul>
                     <div class="top_filter">
                       <select class="selectpicker" id="filteropt" name="filteropt" onchange="showFilterIp(this.value);">
-                        <option value="">Search By</option>
+                        <?php/*<option value="">Search By</option>*/?>
+                        <option value="all">All</option>
                         <option value="pd">Pickup Date</option>
                         <option value="rn">Ref. no.</option>
                         <option value="od">Order Date</option>
-                        <option value="all">All</option>
                       </select>
                     </div>
                     </form>
@@ -80,14 +80,32 @@
                                       <td class="text-center"><?php echo $eachResult['filecount']; ?></td>
                                       <td class="text-center"><i class="fa fa-eye" aria-hidden="true" data-toggle="modal" data-target="#myModal1" id="vieworder_<?php echo $eachResult['order_reference_id']; ?>_co"></i></td>
                                       <td class="text-center">
-                                        <select class="selectpicker" onchange="updatestatus(this.value, <?php echo $eachResult['order_reference_id']; ?>);" >
-                                          <option value="" >Status</option>
-                                          <option value="1" <?php echo ($eachResult['order_status']==1)?"selected":""; ?> >Recieved</option>
-                                          <option value="2" <?php echo ($eachResult['order_status']==2)?"selected":""; ?> >Work In Progress</option>
-                                          <option value="3" <?php echo ($eachResult['order_status']==3)?"selected":""; ?> >Complete</option>
-                                          <option value="4" <?php echo ($eachResult['order_status']==4)?"selected":""; ?> >Delivered</option>
-                                        </select>
-                                        <p style="font:10px; color:#009900; text-align:center;" id="statup_<?php echo $eachResult['order_reference_id']; ?>" ></p>
+                                        <?php
+                                        if( isset($admincase) && $admincase==1 )
+                                        {
+                                          switch($eachResult['order_status'])
+                                          {
+                                            case 1: echo "Recieved"; break;
+                                            case 2: echo "Work In Progress"; break;
+                                            case 3: echo "Complete"; break;
+                                            case 4: echo "Delivered"; break;
+                                            default: echo "Open"; break;
+                                          }
+                                        }
+                                        else
+                                        {
+                                          ?>
+                                          <select class="selectpicker" onchange="updatestatus(this.value, <?php echo $eachResult['order_reference_id']; ?>);" >
+                                            <option value="" >Status</option>
+                                            <option value="1" <?php echo ($eachResult['order_status']==1)?"selected":""; ?> >Recieved</option>
+                                            <option value="2" <?php echo ($eachResult['order_status']==2)?"selected":""; ?> >Work In Progress</option>
+                                            <option value="3" <?php echo ($eachResult['order_status']==3)?"selected":""; ?> >Complete</option>
+                                            <option value="4" <?php echo ($eachResult['order_status']==4)?"selected":""; ?> >Delivered</option>
+                                          </select>
+                                          <p style="font:10px; color:#009900; text-align:center;" id="statup_<?php echo $eachResult['order_reference_id']; ?>" ></p>
+                                          <?php
+                                        }
+                                        ?>
                                         <!--
                                         <div class="dropdown">
                                           <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Status

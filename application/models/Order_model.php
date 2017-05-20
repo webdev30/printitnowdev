@@ -68,7 +68,16 @@ class Order_model extends CI_Model
         $this->db->select("ppo.*, count(ppod.order_reference_id) as filecount");
         $this->db->from("print_paytm_order ppo");
         $this->db->join("print_paytm_order_detail ppod", "ppod.order_reference_id = ppo.order_reference_id", "left");
-        $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4") );
+        
+        if( $vid==0 )
+        {
+            $this->db->where( array("ppo.order_status !="=>"4") );
+        }
+        else
+        {
+            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4") );
+        }
+        
         $this->db->group_by( "ppo.order_reference_id" );
         $this->db->order_by( "ppo.order_reference_id", "desc" );
         $query = $this->db->get();
@@ -83,7 +92,16 @@ class Order_model extends CI_Model
         $this->db->select("ppo.*, count(ppod.order_reference_id) as filecount");
         $this->db->from("print_paytm_order ppo");
         $this->db->join("print_paytm_order_detail ppod", "ppod.order_reference_id = ppo.order_reference_id", "left");
-        $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status ="=>"4") );
+
+        if( $vid==0 )
+        {
+            $this->db->where( array("ppo.order_status ="=>"4") );
+        }
+        else
+        {
+            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status ="=>"4") );
+        }
+
         $this->db->group_by( "ppo.order_reference_id" );
         $this->db->order_by( "ppo.order_reference_id", "desc" );
         $query = $this->db->get();
@@ -99,20 +117,43 @@ class Order_model extends CI_Model
         $this->db->from("print_paytm_order ppo");
         $this->db->join("print_paytm_order_detail ppod", "ppod.order_reference_id = ppo.order_reference_id", "left");
         
-        switch($filterby)
+        # CO for Admin
+        if( $vid==0 )
         {
-        case 'rn':
-            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "ppo.order_reference_no"=>$filterval) );
-            break;
-        case 'pd':
-            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "ppo.pickup_date"=>$filterval) );
-            break;
-        case 'od':
-            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "DATE(ppo.created_on)"=>$filterval) );
-            break;
-        default:
-            $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4") );
-            break;
+            switch($filterby)
+            {
+            case 'rn':
+                $this->db->where( array("ppo.order_status !="=>"4", "ppo.order_reference_no"=>$filterval) );
+                break;
+            case 'pd':
+                $this->db->where( array("ppo.order_status !="=>"4", "ppo.pickup_date"=>$filterval) );
+                break;
+            case 'od':
+                $this->db->where( array("ppo.order_status !="=>"4", "DATE(ppo.created_on)"=>$filterval) );
+                break;
+            default:
+                $this->db->where( array("ppo.order_status !="=>"4") );
+                break;
+            }
+        }
+        # CO for Vendor
+        else
+        {
+            switch($filterby)
+            {
+            case 'rn':
+                $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "ppo.order_reference_no"=>$filterval) );
+                break;
+            case 'pd':
+                $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "ppo.pickup_date"=>$filterval) );
+                break;
+            case 'od':
+                $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4", "DATE(ppo.created_on)"=>$filterval) );
+                break;
+            default:
+                $this->db->where( array("ppo.vendor"=>$vid, "ppo.order_status !="=>"4") );
+                break;
+            }
         }
         
         $this->db->group_by( "ppo.order_reference_id" );

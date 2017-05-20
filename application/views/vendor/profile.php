@@ -58,7 +58,7 @@
                   <p contenteditable="true"><a href="javascript:void(0);" id="changepass" class="btn btn-primary">Change Password</a></p>
                 </div>
 
-                <div class="pass_col" ><form id="changepassform" autocomplete="off" >
+                <div class="pass_col" id="pass_col_div" ><form id="changepassform" autocomplete="off" >
                   <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                       <div class="group_block">
@@ -80,8 +80,10 @@
                     </div>
                   </div>
                   <div class="group_block">
-                    <a class="print_btn btn btn-primary pull-left" id="changepassgo" href="javascript:void(0);"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit</a>
+                    <a class="print_btn btn btn-primary pull-left" id="changepassgo" href="javascript:void(0);"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit</a>&nbsp;&nbsp;
+                    <a class="print_btn btn btn-primary pull-left" id="changepassno" href="javascript:void(0);"><i class="fa fa-paper-plane" aria-hidden="true"></i> Cancel</a>
                     <br /><span id="changepasserr"></span>
+                    <br /><span>Note*:&nbsp;Please mail at info@printitnow.in for any changes/updates in profile.</span>
                   </div>
                 </form></div>
                       

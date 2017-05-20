@@ -225,12 +225,12 @@ if( isset($prPOST) && !empty($prPOST) )
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
                       <div class="form-group">
-                        <input type="number" name="data[no_of_copy][]" value="<?php echo $no_of_copy; ?>" class="form-control" placeholder="No of Copies*">
+                        <input type="number" min="1" name="data[no_of_copy][]" value="<?php echo $no_of_copy; ?>" class="form-control" placeholder="No of Copies*">
                       </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
                       <div class="form-group">
-                        <input type="number" name="data[total_no_pages][]" value="<?php echo $total_no_pages; ?>" class="form-control" placeholder="Total no pages*">
+                        <input type="number" min="1" name="data[total_no_pages][]" value="<?php echo $total_no_pages; ?>" class="form-control" placeholder="Total no pages*">
                       </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
@@ -261,20 +261,20 @@ if( isset($prPOST) && !empty($prPOST) )
                           <div class="pull-left">
                             <label class="">Print* &nbsp; &nbsp;</label>
                             <label class="radio-inline no-pad-right">
-                              <input type="radio" value="all" <?php echo ($optradio=="all" || $optradio=="" )?"checked":""; ?> name="data[optradio][1]">
+                              <input type="radio" value="all" <?php echo ($optradio=="all" )?"checked":""; ?> name="data[optradio][1]">
                               All Pages</label>
                             <label class="radio-inline no-pad-right">
-                              <input type="radio" value="cus" name="data[optradio][1]" <?php echo ($optradio=="cus" )?"checked":""; ?> >
+                              <input type="radio" value="cus" name="data[optradio][1]" <?php echo ($optradio=="cus" || $optradio=="" )?"checked":""; ?> >
                               Custom</label>
                           </div>
-                          <div class="col-md-2 col-sm-2 col-xs-12 pad">
+                          <div id="fromdiv" class="col-md-2 col-sm-2 col-xs-12 pad">
                             <div class="from-group">
-                              <input type="text" name="data[from][]" value="<?php echo $from; ?>" class="form-control" placeholder="From">
+                              <input type="number" min="0" name="data[from][]" value="<?php echo $from; ?>" class="form-control" placeholder="From">
                             </div>
                           </div>
-                          <div class="col-md-2 col-sm-2 col-xs-12 pad">
+                          <div id="todiv" class="col-md-2 col-sm-2 col-xs-12 pad">
                             <div class="from-group">
-                              <input type="text" name="data[to][]" value="<?php echo $to; ?>" class="form-control" placeholder="To">
+                              <input type="number" min="0" name="data[to][]" value="<?php echo $to; ?>" class="form-control" placeholder="To">
                             </div>
                           </div>
                         </div>
